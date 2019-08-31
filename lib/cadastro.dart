@@ -11,11 +11,36 @@ class _CadastroState extends State<Cadastro> {
   final ctipo = TextEditingController();
   final cvalor = TextEditingController();
 
+  //Checkout
   var _tipoOperacao = "D";
+  
   void _setTipoOperacao(v) {
     setState(() {
       _tipoOperacao = v;    
     });
+  }
+
+  //DropDown
+  List _centroCusto = ["Alimentação", "Educação", "Lazer"];
+  List <DropdownMenuItem<String>> _dropDownMenuItems;
+  String _currentCentroCusto;
+  
+  @override
+  void initState() {
+    _dropDownMenuItems = getDropDownMenuItems();
+    _currentCentroCusto = _dropDownMenuItems[0].value;
+    super.initState();
+  }
+
+  List<DropdownMenuItem<String>> getDropDownMenuItems() {
+    List<DropdownMenuItem<String>> itens = new List();
+    for(String cc in _centroCusto) {
+      itens.add(new DropdownMenuItem(
+        value: cc,
+        child: new Text(cc),
+      ));
+    }
+    return itens;
   }
 
   @override
@@ -48,6 +73,20 @@ class _CadastroState extends State<Cadastro> {
                 ],
               ),
             ),
+
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+              child: new DropdownButton(
+                value: _currentCentroCusto,
+                items: _dropDownMenuItems,
+                onChanged: (v){
+                  setState(() {
+                    _currentCentroCusto = v;
+                  });
+                },
+              )),
+
+
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
               child: TextField(
