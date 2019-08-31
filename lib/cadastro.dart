@@ -1,5 +1,6 @@
 import 'package:financeiro/helpers/transacao_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 //Alteração - Stateful
@@ -152,11 +153,29 @@ class _CadastroState extends State<Cadastro> {
     if(_transacaoEdit == null){
       t = Transacao.fromMap(item);
       t = await tHelper.savetransacao(t);
+      Fluttertoast.showToast(
+        msg: "Atualizado com sucesso!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
       Navigator.pop(context, t.id != null ? true : false);  
     } else {
       item[idColumn] = _transacaoEdit.id;
       t = Transacao.fromMap(item);
       int i = await tHelper.updatetransacao(t);
+      Fluttertoast.showToast(
+        msg: "Atualizado com sucesso!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
       debugPrint(i.toString());
       Navigator.pop(context, i != 0 ? true : false);
     }
