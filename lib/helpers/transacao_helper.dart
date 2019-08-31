@@ -36,8 +36,7 @@ class TransacaoHelper {
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int newerVersion) async {
       await db.execute(
-          "CREATE TABLE $transacaoTable($idColumn INTEGER PRIMARY KEY, $valorColumn REAL, $descricaoColumn TEXT,"
-          "$tipoColumn TEXT, $dataColumn TEXT)");
+          "CREATE TABLE $transacaoTable($idColumn INTEGER PRIMARY KEY, $valorColumn REAL, $descricaoColumn TEXT,$tipoColumn TEXT, $dataColumn TEXT, $centroCustoColumn TEXT)");
     });
   }
 
@@ -55,6 +54,7 @@ class TransacaoHelper {
           valorColumn,
           descricaoColumn,
           tipoColumn,
+          centroCustoColumn,
           dataColumn
         ],
         where: "$idColumn = ?",
@@ -106,6 +106,7 @@ class Transacao {
   String data;
   String tipo;
   String descricao;
+  String centroCusto;
 
   Transacao();
 
@@ -115,6 +116,7 @@ class Transacao {
     data = map[dataColumn];
     descricao = map[descricaoColumn];
     tipo = map[tipoColumn];
+    centroCusto = map[centroCustoColumn];
   }
 
   Map toMap() {
@@ -122,7 +124,8 @@ class Transacao {
       valorColumn: valor,
       dataColumn: data,
       descricaoColumn: descricao,
-      tipoColumn: tipo
+      tipoColumn: tipo,
+      centroCustoColumn: centroCusto
     };
     if (id != null) {
       map[idColumn] = id;
@@ -130,8 +133,9 @@ class Transacao {
     return map;
   }
 
+//consertar: centroCustoColumn
   @override
   String toString() {
-    return "transacao(id: $id, valor: $valor, data: $data, descricao: $descricao, tipo: $tipo)";
+    return "transacao(id: $id, valor: $valor, data: $data, descricao: $descricao, tipo: $tipo, centroCusto: $centroCusto)";
   }
 }

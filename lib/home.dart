@@ -31,9 +31,9 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void _cadastro() async {
+  void _cadastro({Transacao item}) async {
     final _goCadastro = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Cadastro()));
+        context, MaterialPageRoute(builder: (context) => Cadastro(transacaoUpdate: item,)));
 
     if (_goCadastro) {
       loadGastos();
@@ -53,16 +53,20 @@ class _HomeState extends State<Home> {
         itemCount: _listaGastos.length,
         itemBuilder: (context, index) {
           return ListTile(
-              leading: CircleAvatar(
-                  child: Icon(
-                    _listaGastos[index].tipo == 'D' ? Icons.remove : Icons.add,
-                    color: Colors.white,
-                  ),
-                  backgroundColor: _listaGastos[index].tipo == 'D'
-                      ? Color(0xffDB4437)
-                      : Colors.green),
-              title: Text(
-                  "${_listaGastos[index].descricao} \$${_listaGastos[index].valor}"));
+            leading: CircleAvatar(
+                child: Icon(
+                  _listaGastos[index].tipo == 'D' ? Icons.remove : Icons.add,
+                  color: Colors.white,
+                ),
+                backgroundColor: _listaGastos[index].tipo == 'D'
+                    ? Color(0xffDB4437)
+                    : Colors.green),
+            title: Text(
+                "${_listaGastos[index].descricao} \$${_listaGastos[index].valor}"),
+            onTap: () {
+              _cadastro(item: _listaGastos[index]);
+            },
+          );
         },
       ),
       backgroundColor: Colors.white,

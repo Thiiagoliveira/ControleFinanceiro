@@ -4,6 +4,10 @@ import 'package:intl/intl.dart';
 
 //Alteração - Stateful
 class Cadastro extends StatefulWidget {
+  final Transacao transacaoUpdate;
+
+  //Construtor:
+  Cadastro({this.transacaoUpdate});
   @override
   _CadastroState createState() => _CadastroState();
 }
@@ -29,10 +33,21 @@ class _CadastroState extends State<Cadastro> {
   List<DropdownMenuItem<String>> _dropDownMenuItems;
   String _currentCentroCusto;
 
+  Transacao _transacaoEdit;
+
   @override
   void initState() {
     _dropDownMenuItems = getDropDownMenuItems();
     _currentCentroCusto = _dropDownMenuItems[0].value;
+
+    if (widget.transacaoUpdate != null) {
+      _transacaoEdit = Transacao.fromMap(widget.transacaoUpdate.toMap());
+      cdescricao.text = _transacaoEdit.descricao;
+      cvalor.text = _transacaoEdit.valor.toString();
+      _tipoOperacao =  _transacaoEdit.tipo;
+      _currentCentroCusto = _transacaoEdit.centroCusto;
+    }
+
     super.initState();
   }
 
@@ -130,12 +145,20 @@ class _CadastroState extends State<Cadastro> {
     item[descricaoColumn] = cdescricao.text;
     item[tipoColumn] = _tipoOperacao;
     item[valorColumn] = double.parse(cvalor.text);
-    item[centroCustoColumn] = _currentCentroCusto;
     item[dataColumn] = DateFormat("dd-mm-yyyy").format(DateTime.now());
+    item[centroCustoColumn] = _currentCentroCusto;
 
-    Transacao t = await tHelper.savetransacao(Transacao.fromMap(item));
-    debugPrint(t.toString());
-
-    Navigator.pop(context, t.id != null ? true : false);
+    Transacao t;
+    if(_transacaoEdit == null){
+      t = Transacao.fromMap(item);
+      t = await tHelper.savetransacao(t);
+      Navigator.pop(context, t.id != null ? true : false);  
+    } else {
+      item[idColumn] = _transacaoEdit.id;
+      t = Transacao.fromMap(item);
+      int i = await tHelper.updatetransacao(t);
+      debugPrint(i.toString());
+      Navigator.pop(context, i != 0 ? true : false);
+    }
   }
 }
