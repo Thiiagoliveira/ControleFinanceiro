@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:financeiro/helpers/transacao_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'cadastro.dart';
@@ -10,7 +11,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List _listaGastos = [];
+  TransacaoHelper tHelper = TransacaoHelper();
+  List<Transacao> _listaGastos = [];
 
   @override
   void initState() {
@@ -22,36 +24,19 @@ class _HomeState extends State<Home> {
 
   //Map -> String
   void loadGastos() {
-    Map<String, dynamic> item = Map();
-    item['id'] = 1;
-    item['descricao'] = 'Picole';
-    item['tipo'] = 'D';
-    item['valor'] = 1.5;
-    _listaGastos.add(item);
-
-    item = Map();
-    item['id'] = 2;
-    item['descricao'] = 'Sorvete';
-    item['tipo'] = 'D';
-    item['valor'] = 3.5;
-    _listaGastos.add(item);
-
-    item = Map();
-    item['id'] = 3;
-    item['descricao'] = 'Salario';
-    item['tipo'] = 'C';
-    item['valor'] = 1000;
-    _listaGastos.add(item);
+    tHelper.getAlltransacaos().then((list) {
+      setState(() {
+        _listaGastos = list;
+      });
+    });
   }
 
   void _cadastro() async {
     final _goCadastro = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => Cadastro()));
 
-    if (_goCadastro != null) {
-      // debugPrint(_goCadastro['id']);
-      // debugPrint(_goCadastro['descricao']);
-      _listaGastos.add(_goCadastro);
+    if (_goCadastro) {
+      loadGastos();
     }
   }
 
@@ -67,21 +52,17 @@ class _HomeState extends State<Home> {
       body: ListView.builder(
         itemCount: _listaGastos.length,
         itemBuilder: (context, index) {
-          return CheckboxListTile(
-              secondary: CircleAvatar(
+          return ListTile(
+              leading: CircleAvatar(
                   child: Icon(
-                    _listaGastos[index]['tipo'] == 'D'
-                        ? Icons.remove
-                        : Icons.add,
+                    _listaGastos[index].tipo == 'D' ? Icons.remove : Icons.add,
                     color: Colors.white,
                   ),
-                  backgroundColor: _listaGastos[index]['tipo'] == 'D'
+                  backgroundColor: _listaGastos[index].tipo == 'D'
                       ? Color(0xffDB4437)
                       : Colors.green),
               title: Text(
-                  "${_listaGastos[index]['descricao']} \$${_listaGastos[index]['valor']}"),
-              value: false,
-              onChanged: (c) {});
+                  "${_listaGastos[index].descricao} \$${_listaGastos[index].valor}"));
         },
       ),
       backgroundColor: Colors.white,
@@ -93,25 +74,5 @@ class _HomeState extends State<Home> {
         child: Icon(Icons.add),
       ),
     );
-  }
-
-  Future<File> _getFile() async {
-    final diretorio = await getApplicationDocumentsDirectory();
-    return File("${diretorio.path}/dados.json");
-  }
-
-  Future<File> _salvarItens() async {
-    String dados = json.encode(_listaGastos);
-    final arquivo = await _getFile();
-    return arquivo.writeAsString(dados);
-  }
-
-  Future<String> _lerItens() async {
-    try {
-      final arquivo = await _getFile();
-      return arquivo.readAsString();
-    } catch (e) {
-      return null;
-    }
   }
 }

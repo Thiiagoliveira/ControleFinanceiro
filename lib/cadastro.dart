@@ -1,4 +1,6 @@
+import 'package:financeiro/helpers/transacao_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 //Alteração - Stateful
 class Cadastro extends StatefulWidget {
@@ -7,24 +9,26 @@ class Cadastro extends StatefulWidget {
 }
 
 class _CadastroState extends State<Cadastro> {
+  TransacaoHelper tHelper = TransacaoHelper();
+
   final cdescricao = TextEditingController();
   final ctipo = TextEditingController();
   final cvalor = TextEditingController();
 
   //Checkout
   var _tipoOperacao = "D";
-  
+
   void _setTipoOperacao(v) {
     setState(() {
-      _tipoOperacao = v;    
+      _tipoOperacao = v;
     });
   }
 
   //DropDown
   List _centroCusto = ["Alimentação", "Educação", "Lazer"];
-  List <DropdownMenuItem<String>> _dropDownMenuItems;
+  List<DropdownMenuItem<String>> _dropDownMenuItems;
   String _currentCentroCusto;
-  
+
   @override
   void initState() {
     _dropDownMenuItems = getDropDownMenuItems();
@@ -34,7 +38,7 @@ class _CadastroState extends State<Cadastro> {
 
   List<DropdownMenuItem<String>> getDropDownMenuItems() {
     List<DropdownMenuItem<String>> itens = new List();
-    for(String cc in _centroCusto) {
+    for (String cc in _centroCusto) {
       itens.add(new DropdownMenuItem(
         value: cc,
         child: new Text(cc),
@@ -63,30 +67,27 @@ class _CadastroState extends State<Cadastro> {
                       value: "C",
                       groupValue: _tipoOperacao,
                       onChanged: _setTipoOperacao),
-                  Text("Débito"),
+                  Text("Crédito"),
                   Radio(
                       //#valor. #grupo, #ação
                       value: "D",
                       groupValue: _tipoOperacao,
                       onChanged: _setTipoOperacao),
-                  Text("Crédito"),
+                  Text("Débito"),
                 ],
               ),
             ),
-
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-              child: new DropdownButton(
-                value: _currentCentroCusto,
-                items: _dropDownMenuItems,
-                onChanged: (v){
-                  setState(() {
-                    _currentCentroCusto = v;
-                  });
-                },
-              )),
-
-
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                child: new DropdownButton(
+                  value: _currentCentroCusto,
+                  items: _dropDownMenuItems,
+                  onChanged: (v) {
+                    setState(() {
+                      _currentCentroCusto = v;
+                    });
+                  },
+                )),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
               child: TextField(
@@ -122,12 +123,19 @@ class _CadastroState extends State<Cadastro> {
     );
   }
 
-  void _registrarDespesas() {
+  void _registrarDespesas() async {
     Map<String, dynamic> item = Map();
-    item['id'] = TimeOfDay.now().toString();
-    item['descricao'] = cdescricao.text;
-    item['tipo'] = _tipoOperacao;
-    item['valor'] = cvalor.text;
-    Navigator.pop(context, item);
+
+    // item[idColumn] = TimeOfDay.now().toString();
+    item[descricaoColumn] = cdescricao.text;
+    item[tipoColumn] = _tipoOperacao;
+    item[valorColumn] = double.parse(cvalor.text);
+    item[centroCustoColumn] = _currentCentroCusto;
+    item[dataColumn] = DateFormat("dd-mm-yyyy").format(DateTime.now());
+
+    Transacao t = await tHelper.savetransacao(Transacao.fromMap(item));
+    debugPrint(t.toString());
+
+    Navigator.pop(context, t.id != null ? true : false);
   }
 }

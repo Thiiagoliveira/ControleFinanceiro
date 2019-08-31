@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\UC19180385\\projetos\\financeiro\\build\\app\\intermediates\\res\\merged\\debug\\values_values.arsc.flat",
+            "outputFile": "D:\\My Projects\\IO_Flutter\\projetos\\ControleFinanceiro\\build\\app\\intermediates\\res\\merged\\debug\\values_values.arsc.flat",
             "map": [
                 {
-                    "source": "C:\\Users\\UC19180385\\projetos\\financeiro\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "source": "D:\\My Projects\\IO_Flutter\\projetos\\ControleFinanceiro\\android\\app\\src\\main\\res\\values\\styles.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
