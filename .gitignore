@@ -1,0 +1,80 @@
+# Diversos
+* .class
+* .lock
+* .log
+* .pyc
+* .swp
+.DS_Store
+.atom /
+.buildlog /
+.história
+.svn /
+# Relacionados ao IntelliJ
+* .iml
+* .ipr
+* .iws
+.idea /
+# Código do Visual Studio relacionado
+.vscode /
+# Específico de repo Flutter
+/ bin / cache /
+/ bin / mingit /
+/ dev / benchmarks / mega_gallery /
+/ dev / bots / .recipe_deps
+/ dev / bots / android_tools /
+/ dev / docs / doc /
+/ dev / docs / lib /
+/ dev / docs / pubspec.yaml
+/ embalagens / flutter / cobertura /
+versão
+# Relacionados com Flutter / Dart / Pub
+** / doc / api /
+.dart_tool /
+.flutter-plugins
+.packages
+.pub-cache /
+.pub /
+construir /
+flutter_ * .png
+linked_ * .ds
+unlinked.ds
+unlinked_spec.ds
+# Android relacionado
+** / android / ** / gradle-wrapper.jar
+** / android / .gradle
+** / android / capturas /
+** / android / gradlew
+** / android / gradlew.bat
+** / android / local.properties
+** / android / ** / GeneratedPluginRegistrant.java
+# relacionado ao iOS / XCode
+** / ios / ** / * .mode1v3
+** / ios / ** / * .mode2v3
+** / ios / ** / * .moved-aparte
+** / ios / ** / * .pbxuser
+** / ios / ** / * .perspectivev3
+** / ios / ** / * sincronização /
+** / ios / ** / .sconsign.dblite
+** / ios / ** / .tags *
+** / ios / ** / .vagrant /
+** / ios / ** / DerivedData /
+** / ios / ** / ícone ?
+** / ios / ** / Pods /
+** / ios / ** / .symlinks /
+** / ios / ** / perfil
+** / ios / ** / xcuserdata
+** / ios / .generated /
+** / ios / Flutter / App.framework
+** / ios / Flutter / Flutter.framework
+** / ios / Flutter / Generated.xcconfig
+** / ios / Flutter / app.flx
+** / ios / Flutter / app.zip
+** / ios / Flutter / flutter_assets /
+** / ios / ServiceDefinitions.json
+** / ios / Runner / GeneratedPluginRegistrant. *
+# Exceções às regras acima.
+! ** / ios / ** / default.mode1v3
+! ** / ios / ** / default.mode2v3
+! ** / ios / ** / default.pbxuser
+! ** / ios / ** / default.perspectivev3
+! / packages / flutter_tools / test / data / dart_dependencies_test / ** / .packages
