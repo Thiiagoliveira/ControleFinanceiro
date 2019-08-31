@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:financeiro/helpers/transacao_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'cadastro.dart';
 
 class Home extends StatefulWidget {
@@ -13,13 +14,28 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   TransacaoHelper tHelper = TransacaoHelper();
   List<Transacao> _listaGastos = [];
+  int _corD;
+  int _corC;
 
   @override
   void initState() {
-    super.initState();
+    setCoresB();
     loadGastos();
-    //(Tipo) Descrição Valor
-    //(R) Picole 2.50
+    super.initState();
+  }
+
+  void setCoresB() async {
+    SharedPreferences spref = await SharedPreferences.getInstance();
+    // spref.clear();
+    if (spref.getInt("corDebito") == null) {
+      spref.setInt("corDebito", 0xffDB4437);
+    }
+    if (spref.getInt("corCredito") == null) {
+      spref.setInt("corCredito", 0xFF008000);
+    }
+
+    _corC = spref.getInt("corCredito");
+    _corD = spref.getInt("corDebito");
   }
 
   //Map -> String
@@ -33,7 +49,11 @@ class _HomeState extends State<Home> {
 
   void _cadastro({Transacao item}) async {
     final _goCadastro = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Cadastro(transacaoUpdate: item,)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => Cadastro(
+                  transacaoUpdate: item,
+                )));
 
     if (_goCadastro) {
       loadGastos();
@@ -59,8 +79,8 @@ class _HomeState extends State<Home> {
                   color: Colors.white,
                 ),
                 backgroundColor: _listaGastos[index].tipo == 'D'
-                    ? Color(0xffDB4437)
-                    : Colors.green),
+                    ? Color(_corD)
+                    : Color(_corC)),
             title: Text(
                 "${_listaGastos[index].descricao} \$${_listaGastos[index].valor}"),
             onTap: () {
